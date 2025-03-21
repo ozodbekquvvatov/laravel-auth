@@ -23,6 +23,10 @@
                     <input type="email" class="form-control" id="editEmail" name="email">
                 </div>
                 <div class="form-group">
+                    <label for="editPssword">Password</label>
+                    <input type="password" class="form-control" id="editPassword" name="password">
+                </div>
+                <div class="form-group">
                     <label for="editAvatar">Upload New Avatar</label>
                     <input type="file" class="form-control-file" id="editAvatar" name="image" accept="image/*">
                 </div>
