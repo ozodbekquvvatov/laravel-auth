@@ -21,10 +21,10 @@ class UserUpdateRequest extends FormRequest
      */ public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . request()->route('user'),
-            'password' => 'required|min:8',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|unique:users,email,' . request()->route('user'),
+            'password' => 'nullable|min:8',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
