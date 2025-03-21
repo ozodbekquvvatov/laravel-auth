@@ -113,16 +113,22 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     */ public function update(UserUpdateRequest $request)
+     */ 
+    public function update(UserUpdateRequest $request)
     {
         $user = Auth::user();
-
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-
-
+        $data = $request->validated();
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+        if (!isset($data['password']) || empty($data['password'])) {
+            $data['password'] = $user->password;
+        } else {
+            $data['password'] = bcrypt($data['password']);
+        }
         if ($request->hasFile('image')) {
             if ($user->image) {
                 $imagePath = storage_path('app/public/' . $user->image);
@@ -130,22 +136,19 @@ class UserController extends Controller
                     unlink($imagePath);
                 }
             }
-
             $file = $request->file('image');
             $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs('images', $fileName, 'public');
             $user->image = $filePath;
         }
-
-
+        
         //shuni yozmasam $user->save(); save qizarib qolyapti lekin ishlayapti shundog'am baribir quyib quydimshuni 
         if ($user instanceof User) {
-            $user->save();
+            $user->save($data);
+
         } else {
             throw new \Exception("Invalid user instance.");
         }
-
-
         return redirect()->route('users.index', ['user' => $user->id]);
     }
 
